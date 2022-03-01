@@ -1,0 +1,28 @@
+version: '3.8'
+
+networks:
+  app-net: {}
+
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    networks:
+      - app-net
+    volumes:
+      - .:/app
+
+  nginx-proxy:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - .:/app
+      - ./log:/var/log/nginx"
+    networks:
+      - app-net
+    depends_on:
+      - app
